@@ -1,0 +1,14 @@
+name: donegal-rally
+region: nyc
+static_sites:
+  - name: web
+    github:
+      repo: Bestinhop23/donegal_rally
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    build_command: npm ci && npm run build
+    output_dir: build
+    routes:
+      - path: /
+
