@@ -2,8 +2,7 @@
 
 A browser game inspired by a rally drive through County Donegal.
 
-donegal.bestinhop23.com
-[Check it out! donegal.bestinhop23.com](https://donegal.bestinhop23.com)
+[Check it out!](https://donegal.bestinhop23.com)
 ## Stack
 
 - React
