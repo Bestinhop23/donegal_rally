@@ -1,6 +1,8 @@
 # Donegal Rally
 
-A React browser game inspired by a rally drive through County Donegal.
+A browser game inspired by a rally drive through County Donegal.
+
+donegal.bestinhop23.com
 
 ## Stack
 
