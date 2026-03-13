@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 // ============================================================
 // DONEGAL RALLY - Pseudo-3D Racing Through the Wild Atlantic Way
@@ -12,7 +12,7 @@ const LOCATIONS = [
     { name: "McGinley's", type: 'shop', color: '#e8d8c8', side: -1 },
     { name: "The Cottage Bar", type: 'pub', color: '#6a3a1a', side: 1 },
     { name: "Gallagher's Hotel", type: 'pub', color: '#aa8866', side: -1 },
-    { name: "An Grianán Theatre", type: 'shop', color: '#ccbbaa', side: 1 },
+    { name: "An GrianÃƒÂ¡n Theatre", type: 'shop', color: '#ccbbaa', side: 1 },
     { name: "Whoriskey's Eurospar", type: 'shop', color: '#ddeecc', side: -1 },
     { name: "Pearse Road Chippy", type: 'shop', color: '#ffeecc', side: 1 },
   ]},
@@ -59,7 +59,7 @@ const LOCATIONS = [
   ]},
   { name: "Gortahork", distance: 6400, type: 'village', speedLimit: 50, landmarks: [
     { name: "Teach Jack", type: 'pub', color: '#aa5533', side: -1 },
-    { name: "An Crannóg", type: 'shop', color: '#bbccbb', side: 1 },
+    { name: "An CrannÃƒÂ³g", type: 'shop', color: '#bbccbb', side: 1 },
   ]},
   { name: "Bloody Foreland", distance: 7000, type: 'scenic', speedLimit: 80, landmarks: [
     { name: "Foreland Heights B&B", type: 'shop', color: '#ccddff', side: 1 },
@@ -68,23 +68,23 @@ const LOCATIONS = [
     { name: "Leo's Tavern", type: 'pub', color: '#cc4444', side: 1 },
     { name: "Cope Superstore", type: 'shop', color: '#ddddee', side: -1 },
     { name: "Bunbeg House", type: 'pub', color: '#887766', side: 1 },
-    { name: "Teach Hiúdaí Beag", type: 'pub', color: '#775544', side: -1 },
+    { name: "Teach HiÃƒÂºdaÃƒÂ­ Beag", type: 'pub', color: '#775544', side: -1 },
   ]},
   { name: "Gaoth Dobhair", distance: 8200, type: 'town', speedLimit: 50, landmarks: [
-    { name: "Hiúdaí Beag's", type: 'pub', color: '#5a3322', side: -1 },
+    { name: "HiÃƒÂºdaÃƒÂ­ Beag's", type: 'pub', color: '#5a3322', side: -1 },
     { name: "Ionad Cois Locha", type: 'shop', color: '#ccddcc', side: 1 },
-    { name: "Teach Mhicí", type: 'pub', color: '#6a4433', side: -1 },
-    { name: "Scoil Náisiúnta", type: 'shop', color: '#ddccbb', side: 1 },
+    { name: "Teach MhicÃƒÂ­", type: 'pub', color: '#6a4433', side: -1 },
+    { name: "Scoil NÃƒÂ¡isiÃƒÂºnta", type: 'shop', color: '#ddccbb', side: 1 },
     { name: "Rann na Feirste", type: 'shop', color: '#aabbaa', side: -1 },
   ]},
   { name: "Anagaire", distance: 8800, type: 'village', speedLimit: 60, landmarks: [
     { name: "Danny Minnies", type: 'pub', color: '#993322', side: 1 },
   ]},
   { name: "Crolly", distance: 9200, type: 'village', speedLimit: 50, landmarks: [
-    { name: "Lóistín Uí Dhónaill", type: 'pub', color: '#776655', side: -1 },
+    { name: "LÃƒÂ³istÃƒÂ­n UÃƒÂ­ DhÃƒÂ³naill", type: 'pub', color: '#776655', side: -1 },
     { name: "Crolly Dolls Factory", type: 'shop', color: '#ffccdd', side: 1 },
   ]},
-  { name: "Dunglow / An Clochán Liath", distance: 9800, type: 'town', speedLimit: 50, landmarks: [
+  { name: "Dunglow / An ClochÃƒÂ¡n Liath", distance: 9800, type: 'town', speedLimit: 50, landmarks: [
     { name: "Beedy's Bar", type: 'pub', color: '#664422', side: -1 },
     { name: "The Riverside Hotel", type: 'pub', color: '#8899aa', side: 1 },
     { name: "Bonner's Corner", type: 'shop', color: '#eeddcc', side: -1 },
@@ -98,7 +98,7 @@ const LOCATIONS = [
     { name: "Peter Oliver's", type: 'pub', color: '#663322', side: -1 },
     { name: "Nesbitt Arms Hotel", type: 'pub', color: '#998877', side: 1 },
     { name: "Eddie Doherty Tweed", type: 'shop', color: '#ddccaa', side: -1 },
-    { name: "Cup & Kettle Café", type: 'shop', color: '#ffeedd', side: 1 },
+    { name: "Cup & Kettle CafÃƒÂ©", type: 'shop', color: '#ffeedd', side: 1 },
   ]},
   { name: "Glenties", distance: 11800, type: 'village', speedLimit: 50, landmarks: [
     { name: "The Highlands Hotel", type: 'pub', color: '#556644', side: -1 },
@@ -141,13 +141,13 @@ const LOCATIONS = [
   ]},
   { name: "Carrick", distance: 16600, type: 'village', speedLimit: 50, landmarks: [
     { name: "Slieve League Lodge", type: 'pub', color: '#778866', side: 1 },
-    { name: "Ti Linn Café", type: 'shop', color: '#ffeedd', side: -1 },
+    { name: "Ti Linn CafÃƒÂ©", type: 'shop', color: '#ffeedd', side: -1 },
   ]},
   { name: "Ballyshannon", distance: 17400, type: 'town', speedLimit: 50, landmarks: [
-    { name: "Sean Óg's", type: 'pub', color: '#553322', side: -1 },
+    { name: "Sean Ãƒâ€œg's", type: 'pub', color: '#553322', side: -1 },
     { name: "Dicey Reilly's", type: 'pub', color: '#664433', side: 1 },
     { name: "Donegal Parian China", type: 'shop', color: '#eeeeff', side: -1 },
-    { name: "Niall Mór's", type: 'pub', color: '#443322', side: 1 },
+    { name: "Niall MÃƒÂ³r's", type: 'pub', color: '#443322', side: 1 },
   ]},
   { name: "Bundoran", distance: 18200, type: 'town', speedLimit: 50, landmarks: [
     { name: "Brennan's Bar", type: 'pub', color: '#553322', side: -1 },
@@ -161,7 +161,7 @@ const LOCATIONS = [
   ]},
 ];
 
-// Pre-build a lookup: segIdx → landmarks to render (avoid scanning all locations each frame)
+// Pre-build a lookup: segIdx Ã¢â€ â€™ landmarks to render (avoid scanning all locations each frame)
 const LANDMARK_MAP = new Map();
 for (const loc of LOCATIONS) {
   // Spread landmarks across a WIDE range so they're visible for a long time
@@ -192,7 +192,7 @@ const LOCATION_ZONES = LOCATIONS.map(loc => ({
 const ROAD_SEGMENTS = [];
 function buildRoad() {
   // narrow: 1 = full width, 0.55 = narrow boreen/single track
-  // MOSTLY STRAIGHT roads with gentle bends — true Donegal N56/N15 feel
+  // MOSTLY STRAIGHT roads with gentle bends Ã¢â‚¬â€ true Donegal N56/N15 feel
   const patterns = [
     { len: 300, curve: 0, narrow: 1 },           // Letterkenny - long straight
     { len: 40, curve: 0.15, narrow: 1 },          // Gentle bend
@@ -308,6 +308,21 @@ function buildRoad() {
 }
 const TOTAL_SEGMENTS = buildRoad();
 
+function wrapRoadDelta(targetZ, playerZ) {
+  let d = targetZ - playerZ;
+  const half = TOTAL_SEGMENTS / 2;
+  if (d > half) d -= TOTAL_SEGMENTS;
+  if (d < -half) d += TOTAL_SEGMENTS;
+  return d;
+}
+
+function hasRoadMarkings(segN) {
+  const seg = ROAD_SEGMENTS[segN];
+  if (!seg) return true;
+  if (seg.narrow < 0.7) return false;
+  return (Math.floor(segN / 220) % 5) !== 2;
+}
+
 // Obstacle types
 const OBS_TYPES = [
   { id: 'cow', name: 'COW', points: 50, moveSpeed: 0.2 },
@@ -316,6 +331,47 @@ const OBS_TYPES = [
   { id: 'baileys', name: 'BAILEYS', points: 75, moveSpeed: 0 },
   { id: 'sheep', name: 'SHEEP', points: 30, moveSpeed: 0.15 },
 ];
+
+const RADIO_STATIONS = [
+  {
+    id: 'country',
+    folder: 'country',
+    label: 'Country',
+    badge: 'CTR',
+    accent: '#d7a25b',
+    glow: 'rgba(215, 162, 91, 0.28)',
+    blurb: 'Back-road singalongs',
+  },
+  {
+    id: 'power hour',
+    folder: 'power hour',
+    label: 'Power Hour',
+    badge: 'PWR',
+    accent: '#59d7ff',
+    glow: 'rgba(89, 215, 255, 0.3)',
+    blurb: 'Donk, trance and late-pub chaos',
+  },
+];
+
+const RADIO_OFF_STATION = {
+  id: 'off',
+  folder: '',
+  label: 'Radio Off',
+  badge: 'OFF',
+  accent: '#b7c1ca',
+  glow: 'rgba(183, 193, 202, 0.25)',
+  blurb: 'Just the Atlantic wind and the tyres',
+  tracks: [],
+};
+
+const RADIO_DIAL_ORDER = [RADIO_OFF_STATION.id, ...RADIO_STATIONS.map((station) => station.id)];
+
+function toPublicUrl(relativePath) {
+  const base = process.env.PUBLIC_URL || '';
+  const cleanPath = `${relativePath || ''}`.replace(/^\/+/, '');
+  if (!base) return `/${cleanPath}`;
+  return `${base.replace(/\/+$/, '')}/${cleanPath}`;
+}
 
 // ============ SPRITE DRAWING ============
 
@@ -563,6 +619,262 @@ function drawSheep(ctx, x, y, w, h) {
   }
 }
 
+function buildSignLines(name, maxChars = 14) {
+  const words = `${name || ''}`.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+
+  const lines = [];
+  let current = words[0];
+
+  for (let i = 1; i < words.length; i++) {
+    const next = `${current} ${words[i]}`;
+    if (next.length <= maxChars || lines.length >= 1) current = next;
+    else {
+      lines.push(current);
+      current = words[i];
+    }
+  }
+
+  lines.push(current);
+  if (lines.length <= 2) return lines;
+  return [lines[0], lines.slice(1).join(' ')];
+}
+
+function drawSignText(ctx, name, x, y, w, h, fillStyle) {
+  const lines = buildSignLines(name, 15);
+  if (!lines.length) return;
+
+  const longest = lines.reduce((max, line) => Math.max(max, line.length), 1);
+  const fontSize = Math.max(
+    7,
+    Math.min(
+      20,
+      Math.floor((w * 1.75) / Math.max(6, longest)),
+      Math.floor(h / (lines.length === 1 ? 1.35 : 2.35))
+    )
+  );
+
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = fillStyle;
+  ctx.strokeStyle = 'rgba(8, 8, 8, 0.82)';
+  ctx.lineWidth = Math.max(1, fontSize * 0.18);
+  ctx.lineJoin = 'round';
+  ctx.font = `bold ${fontSize}px "Trebuchet MS", "Arial Narrow", sans-serif`;
+
+  const totalHeight = lines.length * fontSize + (lines.length - 1) * 2;
+  const startY = y + h / 2 - totalHeight / 2 + fontSize * 0.8;
+
+  lines.forEach((line, index) => {
+    const textY = startY + index * (fontSize + 2);
+    ctx.strokeText(line, x + w / 2, textY);
+    ctx.fillText(line, x + w / 2, textY);
+  });
+
+  ctx.restore();
+}
+
+function drawSeagull(ctx, x, y, size) {
+  ctx.save();
+  ctx.strokeStyle = 'rgba(228,236,242,0.72)';
+  ctx.lineWidth = Math.max(1, size * 0.12);
+  ctx.beginPath();
+  ctx.arc(x - size * 0.44, y, size * 0.44, Math.PI, 0);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x + size * 0.44, y, size * 0.44, Math.PI, 0);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawLighthouse(ctx, x, y, w, h) {
+  ctx.save();
+
+  const beam = ctx.createLinearGradient(x + w * 0.62, y + h * 0.18, x + w * 2.4, y - h * 0.05);
+  beam.addColorStop(0, 'rgba(255,244,200,0.38)');
+  beam.addColorStop(1, 'rgba(255,244,200,0)');
+  ctx.fillStyle = beam;
+  ctx.beginPath();
+  ctx.moveTo(x + w * 0.58, y + h * 0.18);
+  ctx.lineTo(x + w * 2.5, y - h * 0.06);
+  ctx.lineTo(x + w * 2.45, y + h * 0.12);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#dcd7ca';
+  ctx.fillRect(x + w * 0.28, y + h * 0.22, w * 0.34, h * 0.7);
+  ctx.fillStyle = '#c7423b';
+  ctx.fillRect(x + w * 0.28, y + h * 0.38, w * 0.34, h * 0.11);
+  ctx.fillRect(x + w * 0.28, y + h * 0.62, w * 0.34, h * 0.11);
+  ctx.fillStyle = '#1f2e3f';
+  ctx.fillRect(x + w * 0.22, y + h * 0.15, w * 0.46, h * 0.1);
+  ctx.fillRect(x + w * 0.36, y + h * 0.07, w * 0.18, h * 0.08);
+  ctx.fillStyle = '#9ad9ff';
+  ctx.fillRect(x + w * 0.33, y + h * 0.17, w * 0.24, h * 0.06);
+  ctx.fillStyle = '#1a2319';
+  ctx.fillRect(x + w * 0.12, y + h * 0.9, w * 0.64, h * 0.08);
+
+  ctx.restore();
+}
+
+function drawPostcard(ctx, x, y, w, h, theme) {
+  ctx.save();
+
+  ctx.fillStyle = 'rgba(0,0,0,0.45)';
+  ctx.fillRect(x - 5, y - 5, w + 10, h + 10);
+  ctx.fillStyle = '#efe1bf';
+  ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = '#f8f0da';
+  ctx.fillRect(x + 6, y + 6, w - 12, h - 12);
+
+  if (theme === 'atlantic') {
+    const sky = ctx.createLinearGradient(0, y + 8, 0, y + h * 0.52);
+    sky.addColorStop(0, '#5f8192');
+    sky.addColorStop(1, '#bcd2d7');
+    ctx.fillStyle = sky;
+    ctx.fillRect(x + 8, y + 8, w - 16, h - 16);
+    ctx.fillStyle = '#234a64';
+    ctx.fillRect(x + 8, y + h * 0.54, w - 16, h * 0.23);
+    ctx.fillStyle = '#284020';
+    ctx.beginPath();
+    ctx.moveTo(x + 8, y + h * 0.62);
+    ctx.lineTo(x + w * 0.28, y + h * 0.45);
+    ctx.lineTo(x + w * 0.46, y + h * 0.64);
+    ctx.lineTo(x + w - 8, y + h * 0.56);
+    ctx.lineTo(x + w - 8, y + h - 8);
+    ctx.lineTo(x + 8, y + h - 8);
+    ctx.closePath();
+    ctx.fill();
+    drawLighthouse(ctx, x + w * 0.16, y + h * 0.26, w * 0.18, h * 0.42);
+    ctx.fillStyle = '#14242d';
+    ctx.fillRect(x + w * 0.56, y + h * 0.62, w * 0.16, h * 0.03);
+    ctx.beginPath();
+    ctx.moveTo(x + w * 0.6, y + h * 0.62);
+    ctx.lineTo(x + w * 0.67, y + h * 0.54);
+    ctx.lineTo(x + w * 0.7, y + h * 0.62);
+    ctx.closePath();
+    ctx.fill();
+  } else if (theme === 'pub') {
+    const wall = ctx.createLinearGradient(0, y + 8, 0, y + h - 8);
+    wall.addColorStop(0, '#5a3424');
+    wall.addColorStop(1, '#2e1a12');
+    ctx.fillStyle = wall;
+    ctx.fillRect(x + 8, y + 8, w - 16, h - 16);
+    ctx.fillStyle = '#191919';
+    ctx.fillRect(x + w * 0.15, y + h * 0.22, w * 0.7, h * 0.16);
+    drawSignText(ctx, "DONEGAL PUB", x + w * 0.15, y + h * 0.22, w * 0.7, h * 0.16, '#f2d78e');
+    ctx.fillStyle = '#ffdb70';
+    ctx.fillRect(x + w * 0.18, y + h * 0.42, w * 0.18, h * 0.19);
+    ctx.fillRect(x + w * 0.64, y + h * 0.42, w * 0.18, h * 0.19);
+    ctx.fillStyle = '#2a1a12';
+    ctx.fillRect(x + w * 0.42, y + h * 0.44, w * 0.16, h * 0.4);
+    ctx.fillStyle = '#f7d887';
+    ctx.fillRect(x + w * 0.66, y + h * 0.5, w * 0.08, h * 0.18);
+    ctx.fillStyle = '#fff5de';
+    ctx.fillRect(x + w * 0.69, y + h * 0.44, w * 0.1, h * 0.07);
+  } else {
+    const sky = ctx.createLinearGradient(0, y + 8, 0, y + h * 0.45);
+    sky.addColorStop(0, '#6b8391');
+    sky.addColorStop(1, '#b0c3ca');
+    ctx.fillStyle = sky;
+    ctx.fillRect(x + 8, y + 8, w - 16, h - 16);
+    ctx.fillStyle = '#2f4b1c';
+    ctx.fillRect(x + 8, y + h * 0.5, w - 16, h * 0.34);
+    ctx.fillStyle = '#2a2a2a';
+    ctx.beginPath();
+    ctx.moveTo(x + w * 0.48, y + h * 0.28);
+    ctx.lineTo(x + w * 0.72, y + h * 0.82);
+    ctx.lineTo(x + w * 0.56, y + h * 0.82);
+    ctx.lineTo(x + w * 0.4, y + h * 0.28);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#ffcc00';
+    ctx.fillRect(x + w * 0.53, y + h * 0.44, w * 0.04, h * 0.2);
+    ctx.fillStyle = '#2565d2';
+    ctx.fillRect(x + w * 0.34, y + h * 0.52, w * 0.2, h * 0.14);
+    ctx.fillRect(x + w * 0.39, y + h * 0.46, w * 0.1, h * 0.08);
+    ctx.fillStyle = '#111';
+    ctx.fillRect(x + w * 0.34, y + h * 0.63, w * 0.04, h * 0.07);
+    ctx.fillRect(x + w * 0.5, y + h * 0.63, w * 0.04, h * 0.07);
+  }
+
+  ctx.fillStyle = '#1c1b16';
+  ctx.font = `bold ${Math.max(11, w * 0.08) | 0}px "Trebuchet MS", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText(theme === 'atlantic' ? 'WILD ATLANTIC' : theme === 'pub' ? 'PUB STOPS' : 'RALLY ROADS', x + w / 2, y + h - 12);
+
+  ctx.restore();
+}
+
+function drawMichaelMartinPortrait(ctx, x, y, w, h) {
+  ctx.save();
+
+  ctx.fillStyle = 'rgba(0,0,0,0.45)';
+  ctx.fillRect(x - 6, y - 6, w + 12, h + 12);
+  ctx.fillStyle = '#efe3c4';
+  ctx.fillRect(x, y, w, h);
+
+  ctx.fillStyle = '#1f8a4c';
+  ctx.fillRect(x + 8, y + 8, (w - 16) / 3, h - 16);
+  ctx.fillStyle = '#f4f0e7';
+  ctx.fillRect(x + 8 + (w - 16) / 3, y + 8, (w - 16) / 3, h - 16);
+  ctx.fillStyle = '#e2704d';
+  ctx.fillRect(x + 8 + ((w - 16) / 3) * 2, y + 8, (w - 16) / 3, h - 16);
+
+  ctx.fillStyle = 'rgba(8,12,16,0.55)';
+  ctx.fillRect(x + w * 0.1, y + h * 0.64, w * 0.8, h * 0.22);
+
+  ctx.fillStyle = '#23374e';
+  ctx.beginPath();
+  ctx.moveTo(x + w * 0.22, y + h * 0.88);
+  ctx.lineTo(x + w * 0.5, y + h * 0.54);
+  ctx.lineTo(x + w * 0.78, y + h * 0.88);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#f0c4a0';
+  ctx.beginPath();
+  ctx.ellipse(x + w * 0.5, y + h * 0.42, w * 0.18, h * 0.2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#d8b292';
+  ctx.fillRect(x + w * 0.44, y + h * 0.54, w * 0.12, h * 0.08);
+
+  ctx.fillStyle = '#cfd8df';
+  ctx.beginPath();
+  ctx.moveTo(x + w * 0.42, y + h * 0.62);
+  ctx.lineTo(x + w * 0.5, y + h * 0.7);
+  ctx.lineTo(x + w * 0.58, y + h * 0.62);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#1d3552';
+  ctx.fillRect(x + w * 0.47, y + h * 0.62, w * 0.06, h * 0.18);
+  ctx.fillStyle = '#f2b749';
+  ctx.fillRect(x + w * 0.49, y + h * 0.64, w * 0.02, h * 0.14);
+
+  ctx.fillStyle = '#6b6e72';
+  ctx.beginPath();
+  ctx.ellipse(x + w * 0.5, y + h * 0.3, w * 0.18, h * 0.13, 0, Math.PI, Math.PI * 2);
+  ctx.fill();
+  ctx.fillRect(x + w * 0.32, y + h * 0.29, w * 0.36, h * 0.08);
+
+  ctx.fillStyle = '#2a211c';
+  ctx.fillRect(x + w * 0.41, y + h * 0.42, w * 0.04, h * 0.02);
+  ctx.fillRect(x + w * 0.55, y + h * 0.42, w * 0.04, h * 0.02);
+  ctx.fillRect(x + w * 0.47, y + h * 0.5, w * 0.06, h * 0.02);
+  ctx.fillRect(x + w * 0.44, y + h * 0.56, w * 0.12, h * 0.02);
+
+  ctx.fillStyle = 'rgba(16,16,16,0.72)';
+  ctx.fillRect(x + 10, y + h - 36, w - 20, 26);
+  ctx.fillStyle = '#f6e0a0';
+  ctx.font = `bold ${Math.max(11, w * 0.085) | 0}px "Trebuchet MS", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText('TAOISEACH MICHEAL MARTIN', x + w / 2, y + h - 18);
+
+  ctx.restore();
+}
+
 function drawPub(ctx, x, y, w, h, name, color) {
   if (w < 15) return;
   // Building
@@ -595,16 +907,13 @@ function drawPub(ctx, x, y, w, h, name, color) {
   ctx.strokeRect(x + w*0.7, y + h*0.35, w*0.22, h*0.2);
   // Sign board
   ctx.fillStyle = '#1a1a1a';
-  ctx.fillRect(x + w*0.05, y + h*0.22, w*0.9, h*0.14);
+  ctx.fillRect(x + w*0.05, y + h*0.2, w*0.9, h*0.18);
   ctx.strokeStyle = '#c8a84e';
-  ctx.strokeRect(x + w*0.05, y + h*0.22, w*0.9, h*0.14);
+  ctx.lineWidth = Math.max(1, w * 0.025);
+  ctx.strokeRect(x + w*0.05, y + h*0.2, w*0.9, h*0.18);
   // Pub name
   if (w > 25) {
-    ctx.fillStyle = '#c8a84e';
-    const fontSize = Math.min(Math.max(7, w*0.12)|0, 16);
-    ctx.font = `bold ${fontSize}px monospace`;
-    ctx.textAlign = 'center';
-    ctx.fillText(name, x + w/2, y + h*0.33);
+    drawSignText(ctx, name, x + w*0.05, y + h*0.2, w*0.9, h*0.18, '#f3d890');
   }
   // Guinness sign
   if (w > 40) {
@@ -648,15 +957,12 @@ function drawShop(ctx, x, y, w, h, name, color) {
   }
   // Sign
   ctx.fillStyle = '#2a5a2a';
-  ctx.fillRect(x + w*0.05, y + h*0.15, w*0.9, h*0.22);
+  ctx.fillRect(x + w*0.05, y + h*0.15, w*0.9, h*0.24);
   ctx.strokeStyle = '#c8a84e';
-  ctx.strokeRect(x + w*0.05, y + h*0.15, w*0.9, h*0.22);
+  ctx.lineWidth = Math.max(1, w * 0.025);
+  ctx.strokeRect(x + w*0.05, y + h*0.15, w*0.9, h*0.24);
   if (w > 25) {
-    ctx.fillStyle = '#fff';
-    const fontSize = Math.min(Math.max(7, w*0.11)|0, 14);
-    ctx.font = `bold ${fontSize}px monospace`;
-    ctx.textAlign = 'center';
-    ctx.fillText(name, x + w/2, y + h*0.3);
+    drawSignText(ctx, name, x + w*0.05, y + h*0.15, w*0.9, h*0.24, '#f7fafc');
   }
 }
 
@@ -748,6 +1054,16 @@ function drawPlayerCar(ctx, x, y, w, h) {
 
 function Game() {
   const canvasRef = useRef(null);
+  const audioRef = useRef(null);
+  const radioPopupTimerRef = useRef(null);
+  const activeStationRef = useRef(RADIO_OFF_STATION.id);
+  const trackCursorRef = useRef({});
+  const [musicStations, setMusicStations] = useState([]);
+  const [activeStation, setActiveStation] = useState(RADIO_OFF_STATION.id);
+  const [radioTrack, setRadioTrack] = useState('');
+  const [radioError, setRadioError] = useState('');
+  const [radioPlaying, setRadioPlaying] = useState(false);
+  const [radioPopup, setRadioPopup] = useState(null);
   const gsRef = useRef({
     running: false,
     started: false,
@@ -757,6 +1073,7 @@ function Game() {
     speed: 0,
     maxSpeed: 5,
     position: 0,
+    previousPosition: 0,
     playerX: -0.25,
     lives: 3,
     invincible: 0,
@@ -778,6 +1095,13 @@ function Game() {
     diffLevel: 1,
     inTown: false,
     nearbyLandmarks: [],
+    townPopupTimer: 0,
+    townPopupName: '',
+    townPopupLandmarks: [],
+    activeTown: '',
+    requiresKeyboard: false,
+    keyboardDetected: true,
+    inputBlocked: false,
     obstFreq: 100,
     isNarrow: false,
     pullInWarning: false,
@@ -790,6 +1114,7 @@ function Game() {
     const gs = gsRef.current;
     Object.assign(gs, {
       score: 0, speed: 0, position: 0, playerX: -0.25,
+      previousPosition: 0,
       lives: 3, invincible: 0, combo: 1, comboTimer: 0,
       distanceTraveled: 0, obstacles: [], oncomingCars: [],
       lastObstSpawn: 0, lastCarSpawn: 0, frameCount: 0,
@@ -797,14 +1122,215 @@ function Game() {
       nearMissMsg: '', nearMissTimer: 0, diffLevel: 1,
       gameOver: false, started: true, running: true,
       drunkLevel: 0, drunkTimer: 0,
+      townPopupTimer: 0, townPopupName: '', townPopupLandmarks: [], activeTown: '',
     });
   }, []);
+
+  // Require a hardware keyboard for likely phone/tablet devices.
+  const isLikelyTouchDevice = useCallback(() => {
+    const ua = navigator.userAgent || '';
+    const uaMobile = /Android|iPhone|iPad|iPod|Mobile|Tablet|Silk|Kindle/i.test(ua);
+    const hasTouch = (navigator.maxTouchPoints || 0) > 0;
+    const coarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    return uaMobile || (hasTouch && coarsePointer);
+  }, []);
+
+  useEffect(() => {
+    const gs = gsRef.current;
+    const blocked = isLikelyTouchDevice();
+    gs.requiresKeyboard = blocked;
+    gs.keyboardDetected = !blocked;
+    gs.inputBlocked = blocked;
+  }, [isLikelyTouchDevice]);
+
+  const getStationById = useCallback((stationId) => {
+    if (stationId === RADIO_OFF_STATION.id) return RADIO_OFF_STATION;
+
+    const meta = RADIO_STATIONS.find((station) => station.id === stationId);
+    if (!meta) return null;
+
+    const manifestStation = musicStations.find(
+      (station) => station.id === stationId || station.folder?.toLowerCase() === stationId
+    );
+
+    return {
+      ...meta,
+      tracks: Array.isArray(manifestStation?.tracks) ? manifestStation.tracks : [],
+    };
+  }, [musicStations]);
+
+  const showRadioPopup = useCallback((stationId, headline, subline = '') => {
+    const station = getStationById(stationId) || RADIO_OFF_STATION;
+    setRadioPopup({
+      stationId: station.id,
+      label: station.label,
+      badge: station.badge,
+      accent: station.accent,
+      glow: station.glow,
+      headline,
+      subline,
+    });
+
+    if (radioPopupTimerRef.current) clearTimeout(radioPopupTimerRef.current);
+    radioPopupTimerRef.current = setTimeout(() => {
+      setRadioPopup(null);
+      radioPopupTimerRef.current = null;
+    }, 4000);
+  }, [getStationById]);
+
+  const stopRadio = useCallback((showPopup = false) => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute('src');
+      audio.load();
+    }
+
+    activeStationRef.current = RADIO_OFF_STATION.id;
+    setActiveStation(RADIO_OFF_STATION.id);
+    setRadioPlaying(false);
+    setRadioTrack('');
+    setRadioError('');
+
+    if (showPopup) {
+      showRadioPopup(RADIO_OFF_STATION.id, 'Radio Off', 'Press Tab to switch station');
+    }
+  }, [showRadioPopup]);
+
+  const tuneStation = useCallback((stationId, advance = false, popup = true) => {
+    if (stationId === RADIO_OFF_STATION.id) {
+      stopRadio(popup);
+      return;
+    }
+
+    const station = getStationById(stationId);
+    activeStationRef.current = stationId;
+    setActiveStation(stationId);
+
+    if (!station || station.tracks.length === 0) {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.load();
+      }
+      setRadioPlaying(false);
+      setRadioTrack('');
+      setRadioError(`Drop MP3s into /music/${station?.folder || stationId} to tune this station.`);
+      if (popup) showRadioPopup(stationId, station?.label || 'No Signal', 'No tracks found on this station');
+      return;
+    }
+
+    const audio = audioRef.current || new Audio();
+    audioRef.current = audio;
+
+    const previousIndex = trackCursorRef.current[stationId] ?? -1;
+    const nextIndex = advance
+      ? (previousIndex + 1 + station.tracks.length) % station.tracks.length
+      : previousIndex >= 0
+        ? previousIndex
+        : Math.floor(Math.random() * station.tracks.length);
+
+    const track = station.tracks[nextIndex];
+    trackCursorRef.current[stationId] = nextIndex;
+    setRadioTrack(track.title);
+    setRadioError('');
+
+    audio.volume = 0.48;
+    audio.src = toPublicUrl(track.url);
+    audio.currentTime = 0;
+
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise
+        .then(() => {
+          setRadioPlaying(true);
+          if (popup) showRadioPopup(stationId, station.label, track.title);
+        })
+        .catch(() => {
+          setRadioPlaying(false);
+          setRadioError('Press Tab again to retry playback.');
+          if (popup) showRadioPopup(stationId, station.label, 'Press Tab again to retry playback');
+        });
+    } else {
+      setRadioPlaying(true);
+      if (popup) showRadioPopup(stationId, station.label, track.title);
+    }
+  }, [getStationById, showRadioPopup, stopRadio]);
+
+  const cycleRadioStation = useCallback(() => {
+    const currentIndex = RADIO_DIAL_ORDER.indexOf(activeStationRef.current);
+    const nextIndex = (currentIndex + 1 + RADIO_DIAL_ORDER.length) % RADIO_DIAL_ORDER.length;
+    tuneStation(RADIO_DIAL_ORDER[nextIndex], false, true);
+  }, [tuneStation]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch(toPublicUrl('music-manifest.json'), { cache: 'no-store' })
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('manifest'))))
+      .then((data) => {
+        if (cancelled) return;
+        setMusicStations(Array.isArray(data?.stations) ? data.stations : []);
+        setRadioError('');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setMusicStations([]);
+        setRadioError('Music manifest not found yet. Run start/build after adding MP3s to /music.');
+      });
+
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => () => {
+    if (radioPopupTimerRef.current) clearTimeout(radioPopupTimerRef.current);
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current || new Audio();
+    audioRef.current = audio;
+
+    const handlePlay = () => setRadioPlaying(true);
+    const handlePause = () => setRadioPlaying(false);
+    const handleEnded = () => {
+      if (activeStationRef.current !== RADIO_OFF_STATION.id) {
+        tuneStation(activeStationRef.current, true, false);
+      }
+    };
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
+      audio.pause();
+    };
+  }, [tuneStation]);
 
   // Input
   useEffect(() => {
     const down = (e) => {
-      keysRef.current[e.code] = true;
       const gs = gsRef.current;
+      if (gs.requiresKeyboard && !gs.keyboardDetected) {
+        gs.keyboardDetected = true;
+        gs.inputBlocked = false;
+        gs.flashMsg = 'KEYBOARD DETECTED';
+        gs.flashTimer = 45;
+      }
+      if (gs.inputBlocked) {
+        e.preventDefault();
+        return;
+      }
+      if (e.code === 'Tab') {
+        cycleRadioStation();
+        e.preventDefault();
+        return;
+      }
+      keysRef.current[e.code] = true;
       if (!gs.started && (e.code === 'Space' || e.code === 'Enter')) {
         gs.started = true; gs.running = true;
       }
@@ -812,11 +1338,19 @@ function Game() {
       if (e.code === 'KeyP') gs.paused = !gs.paused;
       e.preventDefault();
     };
-    const up = (e) => { keysRef.current[e.code] = false; e.preventDefault(); };
+    const up = (e) => {
+      const gs = gsRef.current;
+      if (gs.inputBlocked) {
+        e.preventDefault();
+        return;
+      }
+      keysRef.current[e.code] = false;
+      e.preventDefault();
+    };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
-  }, [resetGame]);
+  }, [cycleRadioStation, resetGame]);
 
   // Main loop
   useEffect(() => {
@@ -852,98 +1386,86 @@ function Game() {
       const numLines = 200;
       const camH = 1500;
 
-      if (gs.started && gs.running && !gs.paused && !gs.gameOver) {
+      if (gs.started && gs.running && !gs.paused && !gs.gameOver && !gs.inputBlocked) {
+        const prevPosition = gs.position;
+        gs.previousPosition = prevPosition;
+
         // Difficulty - slower progression
         gs.diffLevel = 1 + Math.floor(gs.distanceTraveled / 4000);
         gs.obstFreq = Math.max(60, 160 - gs.diffLevel * 8);
         gs.maxSpeed = Math.min(5, 2.5 + gs.diffLevel * 0.2);
 
         // Location zone check
+        const prevTown = gs.activeTown || '';
         gs.inTown = false;
-        let townSlow = 1;
+        gs.activeTown = '';
         gs.speedZone = 100;
         gs.nearbyLandmarks = [];
         for (const z of LOCATION_ZONES) {
           if (gs.position >= z.zoneStart && gs.position <= z.zoneEnd) {
             gs.inTown = true;
             gs.speedZone = z.speedLimit || 50;
-            townSlow = 0.35; // much slower in towns so you can see landmarks
             gs.currentLocation = z.name;
             gs.nearbyLandmarks = z.landmarks;
+            gs.activeTown = z.name;
             break;
           } else if (gs.position >= z.approachStart && gs.position <= z.approachEnd) {
             gs.speedZone = 80;
-            townSlow = 0.55;
             gs.currentLocation = z.name;
-            // DON'T set nearbyLandmarks here — banner only shows inside town
+            // DON'T set nearbyLandmarks here Ã¢â‚¬â€ banner only shows inside town
             break;
           }
         }
-
-        // Road segment lookup (needed for edge proximity + curvature)
-        const segIdx = Math.floor(gs.position) % TOTAL_SEGMENTS;
-        const seg = ROAD_SEGMENTS[segIdx];
-
-        // AUTO-ACCELERATE - car drives itself, brake to slow
-        // Pulling to the side (near road edge) auto-slows
-        const edgeProximity = Math.abs(gs.playerX) / (0.85 * (seg ? seg.narrow : 1));
-        const edgeSlow = edgeProximity > 0.7 ? 0.3 : edgeProximity > 0.5 ? 0.6 : 1;
-
-        if (brake) {
-          gs.speed = Math.max(0, gs.speed - 0.06);
-        } else {
-          // Auto accelerate toward target speed
-          const targetSpeed = gs.maxSpeed * townSlow * edgeSlow;
-          if (gs.speed < targetSpeed) {
-            gs.speed = Math.min(targetSpeed, gs.speed + 0.03);
-          } else {
-            gs.speed = Math.max(targetSpeed, gs.speed - 0.02);
-          }
+        if (gs.inTown && gs.activeTown && gs.activeTown !== prevTown) {
+          gs.townPopupName = gs.activeTown;
+          gs.townPopupLandmarks = gs.nearbyLandmarks.slice(0, 6);
+          gs.townPopupTimer = 220;
         }
 
-        // Steering — only when player presses keys
-        // No auto-drift from curves (car stays in lane unless you steer)
-        const steerAmt = 0.035 * (gs.speed / gs.maxSpeed);
+        // Road segment lookup (needed for edge proximity + curvature)
+        const segIdx = ((Math.floor(gs.position) % TOTAL_SEGMENTS) + TOTAL_SEGMENTS) % TOTAL_SEGMENTS;
+        const seg = ROAD_SEGMENTS[segIdx];
+
+        // Full manual speed control.
+        const forwardCap = gs.maxSpeed;
+        const reverseCap = -2;
+        if (accel) gs.speed += 0.075;
+        if (brake) gs.speed -= (gs.speed > 0 ? 0.1 : 0.06);
+        if (!accel && !brake) {
+          gs.speed *= 0.985;
+          if (Math.abs(gs.speed) < 0.015) gs.speed = 0;
+        }
+        gs.speed = Math.max(reverseCap, Math.min(forwardCap, gs.speed));
+
+        // Steering is user-only.
+        const steerAmt = 0.038 * (Math.max(0.6, Math.abs(gs.speed)) / Math.max(1, gs.maxSpeed));
         if (left) gs.playerX -= steerAmt;
         if (right) gs.playerX += steerAmt;
 
-        // Road width clamp - can't leave the road!
+        // Hard road boundary on all roads.
         const roadNarrow = seg ? seg.narrow : 1;
-        const roadEdge = 0.85 * roadNarrow; // narrower road = tighter clamp
+        const roadEdge = 0.85 * roadNarrow;
         gs.isNarrow = roadNarrow < 0.7;
-
-        // HARD wall at road edges - cannot leave the road at all
         if (gs.playerX > roadEdge) {
-          gs.playerX = roadEdge - 0.01;
-          gs.speed *= 0.85;
-          gs.shake = 4;
+          gs.playerX = roadEdge - 0.001;
+          gs.speed *= 0.8;
+          gs.shake = Math.max(gs.shake, 4);
         } else if (gs.playerX < -roadEdge) {
-          gs.playerX = -roadEdge + 0.01;
-          gs.speed *= 0.85;
-          gs.shake = 4;
+          gs.playerX = -roadEdge + 0.001;
+          gs.speed *= 0.8;
+          gs.shake = Math.max(gs.shake, 4);
         }
 
-        // Allow reversing with brake when stopped (for narrow sections)
-        if (brake && gs.speed <= 0.05) {
-          gs.speed = Math.max(-2, gs.speed - 0.05); // reverse!
-        }
-        if (gs.speed < 0) {
-          // Reversing
-          gs.position += gs.speed;
-          gs.distanceTraveled = Math.max(0, gs.distanceTraveled + gs.speed);
-          if (gs.position < 0) gs.position += TOTAL_SEGMENTS;
-          if (accel) gs.speed = Math.min(0, gs.speed + 0.1); // brake while reversing = slow down
-        } else {
-          gs.position += gs.speed;
-          gs.distanceTraveled += gs.speed;
-        }
+        gs.position += gs.speed;
+        gs.distanceTraveled = Math.max(0, gs.distanceTraveled + gs.speed);
         if (gs.position >= TOTAL_SEGMENTS) gs.position -= TOTAL_SEGMENTS;
+        if (gs.position < 0) gs.position += TOTAL_SEGMENTS;
 
         // "PULL IN!" warning when narrow + oncoming car nearby
         gs.pullInWarning = false;
         if (gs.isNarrow) {
           for (const car of gs.oncomingCars) {
-            const dist = car.z - gs.position;
+            const dist = wrapRoadDelta(car.z, gs.position);
             if (dist > 0 && dist < 100) {
               gs.pullInWarning = true;
               break;
@@ -959,7 +1481,7 @@ function Game() {
           gs.obstacles.push({
             type: t, z: gs.position + 300 + Math.random() * 100,
             x: (Math.random() - 0.5) * laneRange, wobble: Math.random() * 6.28,
-            dodged: false, nearMissed: false,
+            dodged: false, nearMissed: false, prevZ: gs.position + 300,
           });
           gs.lastObstSpawn = 0;
           if (gs.diffLevel > 3 && Math.random() < 0.3) {
@@ -967,13 +1489,13 @@ function Game() {
             gs.obstacles.push({
               type: t2, z: gs.position + 320 + Math.random() * 80,
               x: (Math.random() - 0.5) * laneRange, wobble: Math.random() * 6.28,
-              dodged: false, nearMissed: false,
+              dodged: false, nearMissed: false, prevZ: gs.position + 320,
             });
           }
         }
 
         // Spawn oncoming - ONLY on narrow roads (the Donegal boreen experience!)
-        // Ireland drives on the LEFT — oncoming cars come on the RIGHT side
+        // Ireland drives on the LEFT Ã¢â‚¬â€ oncoming cars come on the RIGHT side
         gs.lastCarSpawn++;
         if (gs.isNarrow && gs.lastCarSpawn > 160 && Math.abs(seg?.curve || 0) < 0.5) {
           const carX = 0.1 + Math.random() * 0.2; // right side of road (oncoming on right in Ireland)
@@ -981,12 +1503,14 @@ function Game() {
             z: gs.position + 350, x: carX,
             speed: 0.3 + Math.random() * 0.2, // very slow
             isNarrowCar: true,
+            prevZ: gs.position + 350,
           });
           gs.lastCarSpawn = 0;
         }
 
         // Update obstacles
         for (const obs of gs.obstacles) {
+          obs.prevZ = obs.z;
           if (obs.type.id === 'cow' || obs.type.id === 'sheep') {
             obs.wobble += 0.03;
             obs.x += Math.sin(obs.wobble) * obs.type.moveSpeed * 0.05;
@@ -995,7 +1519,10 @@ function Game() {
         }
 
         // Update oncoming
-        for (const c of gs.oncomingCars) c.z -= c.speed + gs.speed;
+        for (const c of gs.oncomingCars) {
+          c.prevZ = c.z;
+          c.z -= c.speed + gs.speed;
+        }
 
         // Drunk mode update
         if (gs.drunkTimer > 0) {
@@ -1004,160 +1531,129 @@ function Game() {
             gs.drunkLevel = Math.max(0, gs.drunkLevel - 1);
             if (gs.drunkLevel > 0) gs.drunkTimer = 300; // keep decaying
           }
-          // Drunk steering drift — subtle, only at high levels
-          if (gs.drunkLevel >= 3) {
-            gs.playerX += Math.sin(gs.frameCount * 0.03) * (gs.drunkLevel - 2) * 0.0015;
-          }
+          // Keep steering deterministic; no automatic lateral drift here.
         }
 
-        // Collisions — screen-space pixel overlap for precision
-        // Player car screen rect (must match render code exactly)
-        const pCarW = 80;
-        const pCarH = 110;
-        const pCarScreenX = W/2 - pCarW/2 + gs.playerX * W * 0.15;
-        const pCarScreenY = H - pCarH - 15;
-        // Player screen hitbox (slightly inset from visual for fairness)
-        const pHitL = pCarScreenX + pCarW * 0.1;
-        const pHitR = pCarScreenX + pCarW * 0.9;
-        const pHitT = pCarScreenY + pCarH * 0.1;
-        const pHitB = pCarScreenY + pCarH * 0.85;
-
+        // Swept collision checks to catch true direct impacts without false positives.
         if (gs.invincible > 0) gs.invincible--;
+        const playerHalfX = 0.11;
+        const obsHalfX = (obsType) => {
+          if (obsType === 'bus') return 0.2;
+          if (obsType === 'cow') return 0.15;
+          if (obsType === 'sheep') return 0.11;
+          return 0.1;
+        };
+        const hitDepthFront = 2.9;
+        const hitDepthBack = -0.9;
+        const crossedDepth = (before, after) =>
+          (before > hitDepthFront && after < hitDepthBack) ||
+          (after <= hitDepthFront && after >= hitDepthBack);
+
         for (let i = gs.obstacles.length - 1; i >= 0; i--) {
           const obs = gs.obstacles[i];
-          const relZ = obs.z - gs.position;
-          if (relZ < -3 && !obs.dodged) {
+          const relBefore = wrapRoadDelta(obs.prevZ ?? obs.z, prevPosition);
+          const relAfter = wrapRoadDelta(obs.z, gs.position);
+
+          if (relAfter < -3 && !obs.dodged) {
             obs.dodged = true;
             gs.score += obs.type.points * gs.combo;
           }
+          if (relAfter < -60 || relAfter > 700) {
+            gs.obstacles.splice(i, 1);
+            continue;
+          }
+          if (!crossedDepth(relBefore, relAfter)) continue;
 
-          // Compute where this obstacle is on screen right now
-          // (mirrors the render code exactly)
-          if (relZ > 0 && relZ < 15) {
-            const obsSegN = Math.floor(obs.z) % TOTAL_SEGMENTS;
-            const obsProjScale = camH / relZ;
-            const obsRoadW = obsProjScale * 7 * (ROAD_SEGMENTS[obsSegN] ? ROAD_SEGMENTS[obsSegN].narrow : 1);
-            const obsScreenY = horizon + roadHeight * (1 / relZ) * (numLines / 4.5);
-            // obs screen X uses same formula as render
-            const obsScreenCenterX = W/2 + obs.x * obsRoadW * 0.5;
+          const xDist = Math.abs(gs.playerX - obs.x);
+          const hitX = playerHalfX + obsHalfX(obs.type.id);
+          const isHit = xDist <= hitX;
 
-            // Obstacle sprite size (matches render)
-            let ow, oh;
-            if (obs.type.id === 'bus') { ow = obsProjScale * 3; oh = obsProjScale * 1.7; }
-            else if (obs.type.id === 'cow') { ow = obsProjScale * 1.8; oh = obsProjScale * 1.3; }
-            else if (obs.type.id === 'sheep') { ow = obsProjScale * 1.2; oh = obsProjScale * 1; }
-            else { ow = obsProjScale * 1.2; oh = obsProjScale * 1.8; }
-
-            const obsL = obsScreenCenterX - ow/2;
-            const obsR = obsScreenCenterX + ow/2;
-            const obsT = obsScreenY - oh;
-            const obsB = obsScreenY;
-
-            // Pixel-perfect AABB overlap check
-            const xOverlap = pHitR > obsL && pHitL < obsR;
-            const yOverlap = pHitB > obsT && pHitT < obsB;
-
-            if (xOverlap && yOverlap && gs.invincible <= 0) {
-              // BUCKFAST: special - speed boost + drunk!
-              if (obs.type.id === 'buckfast') {
-                gs.drunkLevel = Math.min(5, gs.drunkLevel + 1);
-                gs.drunkTimer = 400 + gs.drunkLevel * 100;
-                gs.speed = Math.min(gs.maxSpeed * 1.5, gs.speed + 2);
-                gs.score += 100 * gs.combo;
-                gs.combo = Math.min(10, gs.combo + 1);
-                gs.comboTimer = 200;
-                gs.flashMsg = gs.drunkLevel >= 4 ? 'BUCKFAST! YER LANGERS!' :
-                              gs.drunkLevel >= 2 ? 'BUCKFAST! FEELIN IT NOW!' : 'BUCKFAST! SPEED BOOST!';
-                gs.flashTimer = 60;
-                gs.shake = 3;
-                gs.obstacles.splice(i, 1);
-                continue;
-              }
-              gs.lives--;
-              gs.invincible = 90;
-              gs.speed *= 0.3;
-              gs.combo = 1;
-              gs.shake = 8;
-              gs.flashMsg = `HIT ${obs.type.name}!`;
-              gs.flashTimer = 50;
-              if (gs.lives <= 0) {
-                gs.gameOver = true;
-                gs.running = false;
-                gs.flashMsg = 'GAME OVER';
-                gs.flashTimer = 999;
-              }
+          if (isHit && gs.invincible <= 0) {
+            if (obs.type.id === 'buckfast') {
+              gs.drunkLevel = Math.min(5, gs.drunkLevel + 1);
+              gs.drunkTimer = 400 + gs.drunkLevel * 100;
+              gs.speed = Math.min(gs.maxSpeed * 1.5, gs.speed + 1.5);
+              gs.score += 100 * gs.combo;
+              gs.combo = Math.min(10, gs.combo + 1);
+              gs.comboTimer = 200;
+              gs.flashMsg = gs.drunkLevel >= 4 ? 'BUCKFAST! YER LANGERS!' :
+                            gs.drunkLevel >= 2 ? 'BUCKFAST! FEELIN IT NOW!' : 'BUCKFAST! SPEED BOOST!';
+              gs.flashTimer = 60;
+              gs.shake = 3;
               gs.obstacles.splice(i, 1);
               continue;
             }
 
-            // Near miss — screen-space: slightly wider than collision box
-            const nearMargin = ow * 0.4;
-            const nearL = obsL - nearMargin;
-            const nearR = obsR + nearMargin;
-            const nearXOverlap = pHitR > nearL && pHitL < nearR;
-            if (nearXOverlap && yOverlap && !xOverlap && !obs.nearMissed) {
-              obs.nearMissed = true;
-              gs.score += 30 * gs.combo;
-              gs.combo = Math.min(8, gs.combo + 1);
-              gs.comboTimer = 200;
-              gs.nearMissMsg = `NEAR MISS! +${30 * gs.combo}`;
-              gs.nearMissTimer = 50;
+            gs.lives--;
+            gs.invincible = 90;
+            gs.speed *= 0.25;
+            gs.combo = 1;
+            gs.shake = 8;
+            gs.flashMsg = `HIT ${obs.type.name}!`;
+            gs.flashTimer = 50;
+            if (gs.lives <= 0) {
+              gs.gameOver = true;
+              gs.running = false;
+              gs.flashMsg = 'GAME OVER';
+              gs.flashTimer = 999;
             }
-          } // end if relZ 0..15
+            gs.obstacles.splice(i, 1);
+            continue;
+          }
 
-          if (relZ < -40) { gs.obstacles.splice(i, 1); }
-        }
-        // Oncoming car collisions — screen-space (only on narrow roads)
-        for (let i = gs.oncomingCars.length - 1; i >= 0; i--) {
-          const car = gs.oncomingCars[i];
-          const relZ = car.z - gs.position;
-          if (relZ > 0.5 && relZ < 15) {
-            const cSegN = Math.floor(car.z) % TOTAL_SEGMENTS;
-            const cProj = camH / relZ;
-            const cRoadW = cProj * 7 * (ROAD_SEGMENTS[cSegN] ? ROAD_SEGMENTS[cSegN].narrow : 1);
-            const cScreenY = horizon + roadHeight * (1 / relZ) * (numLines / 4.5);
-            const cScreenX = W/2 + car.x * cRoadW * 0.5;
-            const cw = cProj * 1.3;
-            const ch = cProj * 1.8;
-            const cL = cScreenX - cw/2;
-            const cR = cScreenX + cw/2;
-            const cT = cScreenY - ch;
-            const cB = cScreenY;
-
-            const xHit = pHitR > cL && pHitL < cR;
-            const yHit = pHitB > cT && pHitT < cB;
-
-            if (xHit && yHit && gs.invincible <= 0) {
-              gs.lives--;
-              gs.invincible = 90;
-              gs.speed = 0;
-              gs.combo = 1;
-              gs.shake = 8;
-              gs.flashMsg = 'HEAD ON! PULL IN NEXT TIME!';
-              gs.flashTimer = 70;
-              if (gs.lives <= 0) {
-                gs.gameOver = true;
-                gs.running = false;
-                gs.flashMsg = 'GAME OVER';
-                gs.flashTimer = 999;
-              }
-              gs.oncomingCars.splice(i, 1);
-              continue;
-            }
-            // Near miss
-            const nearM = cw * 0.4;
-            const nxHit = pHitR > (cL - nearM) && pHitL < (cR + nearM);
-            if (nxHit && yHit && !xHit && !car.nearMissed) {
-              car.nearMissed = true;
-              gs.score += 75 * gs.combo;
-              gs.combo = Math.min(10, gs.combo + 1);
-              gs.comboTimer = 240;
-              gs.nearMissMsg = `TIGHT SQUEEZE! +${75 * gs.combo}`;
-              gs.nearMissTimer = 60;
-            }
+          const nearX = hitX + 0.06;
+          if (!obs.nearMissed && xDist <= nearX && xDist > hitX) {
+            obs.nearMissed = true;
+            const nearPts = 30 * gs.combo;
+            gs.score += nearPts;
+            gs.combo = Math.min(8, gs.combo + 1);
+            gs.comboTimer = 200;
+            gs.nearMissMsg = `NEAR MISS! +${nearPts}`;
+            gs.nearMissTimer = 50;
           }
         }
-        gs.oncomingCars = gs.oncomingCars.filter(c => (c.z - gs.position) > -15);
+
+        for (let i = gs.oncomingCars.length - 1; i >= 0; i--) {
+          const car = gs.oncomingCars[i];
+          const relBefore = wrapRoadDelta(car.prevZ ?? car.z, prevPosition);
+          const relAfter = wrapRoadDelta(car.z, gs.position);
+          if (relAfter < -30 || relAfter > 500) {
+            gs.oncomingCars.splice(i, 1);
+            continue;
+          }
+          if (!crossedDepth(relBefore, relAfter)) continue;
+
+          const xDist = Math.abs(gs.playerX - car.x);
+          const hitX = playerHalfX + 0.16;
+          if (xDist <= hitX && gs.invincible <= 0) {
+            gs.lives--;
+            gs.invincible = 90;
+            gs.speed = 0;
+            gs.combo = 1;
+            gs.shake = 8;
+            gs.flashMsg = 'HEAD ON! PULL IN NEXT TIME!';
+            gs.flashTimer = 70;
+            if (gs.lives <= 0) {
+              gs.gameOver = true;
+              gs.running = false;
+              gs.flashMsg = 'GAME OVER';
+              gs.flashTimer = 999;
+            }
+            gs.oncomingCars.splice(i, 1);
+            continue;
+          }
+
+          const nearX = hitX + 0.06;
+          if (!car.nearMissed && xDist <= nearX && xDist > hitX) {
+            car.nearMissed = true;
+            const nearPts = 75 * gs.combo;
+            gs.score += nearPts;
+            gs.combo = Math.min(10, gs.combo + 1);
+            gs.comboTimer = 240;
+            gs.nearMissMsg = `TIGHT SQUEEZE! +${nearPts}`;
+            gs.nearMissTimer = 60;
+          }
+        }
 
         if (gs.comboTimer > 0) { gs.comboTimer--; if (gs.comboTimer <= 0) gs.combo = 1; }
         if (gs.flashTimer > 0) gs.flashTimer--;
@@ -1172,6 +1668,7 @@ function Game() {
       const sy = gs.shake > 0 ? (Math.random()-0.5)*gs.shake : 0;
       ctx.save();
       ctx.translate(sx, sy);
+      const oceanY = H * 0.36;
 
       // Sky - dark moody Donegal dusk (matching retro gritty aesthetic)
       const skyG = ctx.createLinearGradient(0, 0, 0, H * 0.42);
@@ -1204,8 +1701,13 @@ function Game() {
         ctx.fill();
       }
 
-      // Atlantic Ocean on left side — dark moody water
-      const oceanY = H * 0.36;
+      for (let g = 0; g < 5; g++) {
+        const gx = ((g * 170) + gs.frameCount * 1.7) % (W + 80) - 40;
+        const gy = 72 + (g % 2) * 20 + Math.sin(gs.frameCount * 0.02 + g) * 5;
+        drawSeagull(ctx, gx, gy, 11 + (g % 3) * 4);
+      }
+
+      // Atlantic Ocean on left side Ã¢â‚¬â€ dark moody water
       ctx.fillStyle = '#1a3040';
       ctx.fillRect(0, oceanY, W * 0.3, H * 0.06);
       // Dark waves
@@ -1219,6 +1721,16 @@ function Game() {
         }
         ctx.stroke();
       }
+
+      drawLighthouse(ctx, W * 0.09 + Math.sin(gs.position * 0.002) * 10, oceanY - H * 0.16, W * 0.06, H * 0.17);
+      ctx.fillStyle = '#111d28';
+      ctx.fillRect(W * 0.18, oceanY + H * 0.015, W * 0.09, H * 0.008);
+      ctx.beginPath();
+      ctx.moveTo(W * 0.205, oceanY + H * 0.015);
+      ctx.lineTo(W * 0.242, oceanY - H * 0.018);
+      ctx.lineTo(W * 0.26, oceanY + H * 0.015);
+      ctx.closePath();
+      ctx.fill();
 
       // Mountains - dark silhouettes (Derryveagh / Blue Stacks)
       const mtnY = H * 0.40;
@@ -1352,24 +1864,29 @@ function Game() {
         ctx.fillStyle = (segN % 8) < 4 ? '#2a2a2a' : '#252525';
         ctx.fillRect(screenX - roadW/2, screenY, roadW, stripH + 1);
 
+        const roadMarked = hasRoadMarkings(segN);
+
         // Center dashes
-        if ((segN % 10) < 5) {
+        if (roadMarked && (segN % 10) < 5) {
           ctx.fillStyle = '#ffcc00';
           const lw = Math.max(1, projScale * 0.08);
           ctx.fillRect(screenX - lw/2, screenY, lw, stripH + 1);
         }
 
-        // Edge lines
-        const ew = Math.max(1, projScale * 0.06);
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(screenX - roadW/2, screenY, ew, stripH + 1);
-        ctx.fillRect(screenX + roadW/2 - ew, screenY, ew, stripH + 1);
+        let rw = 0;
+        if (roadMarked) {
+          // Edge lines
+          const ew = Math.max(1, projScale * 0.06);
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(screenX - roadW/2, screenY, ew, stripH + 1);
+          ctx.fillRect(screenX + roadW/2 - ew, screenY, ew, stripH + 1);
 
-        // Rumble strips
-        const rw = Math.max(1, projScale * 0.15);
-        ctx.fillStyle = (segN % 6) < 3 ? '#cc2222' : '#fff';
-        ctx.fillRect(screenX - roadW/2 - rw, screenY, rw, stripH + 1);
-        ctx.fillRect(screenX + roadW/2, screenY, rw, stripH + 1);
+          // Rumble strips
+          rw = Math.max(1, projScale * 0.15);
+          ctx.fillStyle = (segN % 6) < 3 ? '#cc2222' : '#fff';
+          ctx.fillRect(screenX - roadW/2 - rw, screenY, rw, stripH + 1);
+          ctx.fillRect(screenX + roadW/2, screenY, rw, stripH + 1);
+        }
 
         // Stone walls
         if ((segN % 250) < 120 && projScale > 3) {
@@ -1406,7 +1923,7 @@ function Game() {
 
         // Obstacles - BIGGER so they're recognizable
         for (const obs of gs.obstacles) {
-          const relZ = obs.z - gs.position;
+          const relZ = wrapRoadDelta(obs.z, gs.position);
           if (Math.abs(relZ - L.n) < 1.5 && relZ > 0 && projScale > 1.5) {
             let ow, oh;
             if (obs.type.id === 'bus') { ow = projScale * 3; oh = projScale * 1.7; }
@@ -1426,7 +1943,7 @@ function Game() {
 
         // Oncoming cars - realistic facing-toward-you car
         for (const car of gs.oncomingCars) {
-          const relZ = car.z - gs.position;
+          const relZ = wrapRoadDelta(car.z, gs.position);
           if (Math.abs(relZ - L.n) < 1.5 && relZ > 0 && projScale > 1.5) {
             const cw = projScale * 1.3;
             const ch = projScale * 1.8;
@@ -1583,56 +2100,54 @@ function Game() {
         }
       }
 
-      // Landmark banner — shows once per town for 120 frames then gone
-      if (gs.inTown && gs.nearbyLandmarks.length > 0) {
-        // Track which town we entered so we only show banner once per town
-        const townKey = gs.currentLocation;
-        if (gs._lastBannerTown !== townKey) {
-          gs._lastBannerTown = townKey;
-          gs._bannerFramesLeft = 120; // ~2 seconds
-        }
-        if (gs._bannerFramesLeft > 0) {
-          gs._bannerFramesLeft--;
-          const alpha = Math.min(1, gs._bannerFramesLeft / 30); // fade out in last 0.5s
-          const banY = 54;
-          const maxShow = Math.min(gs.nearbyLandmarks.length, 4);
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = 'rgba(0,0,0,0.55)';
-          ctx.fillRect(0, banY, W, maxShow * 20 + 8);
-          ctx.font = '13px monospace';
-          ctx.textAlign = 'center';
-          for (let li = 0; li < maxShow; li++) {
-            const lm = gs.nearbyLandmarks[li];
-            ctx.fillStyle = lm.type === 'pub' ? '#ffdd88' : '#88ddff';
-            const icon = lm.type === 'pub' ? '\uD83C\uDF7A' : '\uD83C\uDFEA';
-            ctx.fillText(`${icon} ${lm.name}`, W/2, banY + 17 + li*20);
-          }
-          ctx.globalAlpha = 1;
-        }
+      // Town popup: only on town entry, auto-hide after a few seconds.
+      if (gs.townPopupTimer > 0 && gs.townPopupLandmarks.length > 0) {
+        gs.townPopupTimer--;
+        const alpha = Math.min(1, gs.townPopupTimer / 40);
+        const pubs = gs.townPopupLandmarks.filter(l => l.type === 'pub').slice(0, 2);
+        const shops = gs.townPopupLandmarks.filter(l => l.type === 'shop').slice(0, 2);
+        const popupY = 54;
+        const popupH = 78;
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = 'rgba(0,0,0,0.65)';
+        ctx.fillRect(0, popupY, W, popupH);
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#aaddaa';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText(`ENTERING ${gs.townPopupName.toUpperCase()}`, W / 2, popupY + 16);
+
+        ctx.fillStyle = '#ffdd88';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText('FAMOUS PUBS', W * 0.28, popupY + 34);
+        ctx.fillStyle = '#88ddff';
+        ctx.fillText('LOCAL SHOPS', W * 0.72, popupY + 34);
+
+        ctx.font = '12px monospace';
+        pubs.forEach((p, i) => {
+          ctx.fillStyle = '#ffcc66';
+          ctx.fillText(p.name, W * 0.28, popupY + 52 + i * 16);
+        });
+        shops.forEach((s, i) => {
+          ctx.fillStyle = '#88ccee';
+          ctx.fillText(s.name, W * 0.72, popupY + 52 + i * 16);
+        });
+
+        ctx.globalAlpha = 1;
       }
 
       // NARROW ROAD warning
       if (gs.isNarrow && gs.started && !gs.gameOver) {
-        // Narrow road indicator
-        ctx.fillStyle = 'rgba(255,165,0,0.15)';
-        ctx.fillRect(0, H*0.4, W, H*0.1);
-
         ctx.fillStyle = '#ffaa00';
-        ctx.font = 'bold 14px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('\u26a0 NARROW ROAD - SINGLE TRACK', W/2, H*0.47);
-
-        // Hedgerow/ditch visual on edges
-        ctx.fillStyle = '#2a5a1a';
-        ctx.fillRect(0, H*0.75, W*0.08, H*0.25);
-        ctx.fillRect(W*0.92, H*0.75, W*0.08, H*0.25);
+        ctx.font = 'bold 12px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('\u26a0 NARROW ROAD', 14, H - 14);
       }
 
-      // PULL IN! warning - flashing
+      // PULL IN! warning - text only, no tinted background
       if (gs.pullInWarning && gs.started && !gs.gameOver) {
         const flash = gs.frameCount % 20 < 10;
-        ctx.fillStyle = flash ? 'rgba(255,0,0,0.25)' : 'rgba(255,100,0,0.15)';
-        ctx.fillRect(0, H*0.28, W, H*0.08);
         ctx.fillStyle = flash ? '#ff2222' : '#ff8800';
         ctx.font = 'bold 22px monospace';
         ctx.textAlign = 'center';
@@ -1694,7 +2209,8 @@ function Game() {
         ctx.fillStyle = '#fff';
         ctx.font = '13px monospace';
         const lines2 = [
-          'AUTO-DRIVE \u2022 \u2190/A Left  \u2192/D Right  \u2193/S Brake',
+          'MANUAL DRIVE \u2022 \u2191/W Accelerate  \u2193/S Brake/Reverse',
+          'TAB \u2022 Cycle Radio Off / Country / Power Hour',
           '',
           'Dodge: Cows, Sheep, McGinley Bus & Baileys',
           'BUCKFAST = Speed Boost + Drunk Mode!',
@@ -1704,51 +2220,24 @@ function Game() {
         ];
         lines2.forEach((l, i) => ctx.fillText(l, W/2, H*0.30 + i*20));
 
-        // Route preview - pubs column and shops column
+        const cardW = Math.min(190, W * 0.22);
+        const cardGap = Math.min(18, W * 0.018);
+        const cardH = Math.min(145, H * 0.17);
+        const cardsWidth = cardW * 3 + cardGap * 2;
+        const cardsX = W / 2 - cardsWidth / 2;
+        const cardsY = H * 0.55;
+
+        drawPostcard(ctx, cardsX, cardsY, cardW, cardH, 'atlantic');
+        drawPostcard(ctx, cardsX + cardW + cardGap, cardsY, cardW, cardH, 'pub');
+        drawPostcard(ctx, cardsX + (cardW + cardGap) * 2, cardsY, cardW, cardH, 'rally');
+
+        ctx.fillStyle = '#88ccff';
+        ctx.font = '12px monospace';
+        ctx.fillText('Town landmark popups appear briefly when you enter each town.', W/2, H*0.79);
+
         ctx.fillStyle = '#ffdd88';
-        ctx.font = 'bold 14px monospace';
-        ctx.fillText('FAMOUS PUBS:', W*0.3, H*0.48);
-        ctx.fillStyle = '#88ddff';
-        ctx.fillText('LOCAL SHOPS:', W*0.7, H*0.48);
-
-        const famousPubs = [
-          "The Brewery Bar, Letterkenny",
-          "The Bridge Bar, Ramelton",
-          "Patsy Dan's, Dunfanaghy",
-          "Teach Jack, Gortahork",
-          "Leo's Tavern, Bunbeg",
-          "Hi\u00fada\u00ed Beag's, Gaoth Dobhair",
-          "Nancy's Bar, Ardara",
-          "The Reel Inn, Donegal Town",
-          "The Old Castle Bar, Donegal Town",
-          "Kitty Kelly's, Killybegs",
-          "Sean \u00d3g's, Ballyshannon",
-          "Brennan's Bar, Bundoran",
-        ];
-        const famousShops = [
-          "McGinley's, Letterkenny",
-          "An Grian\u00e1n Theatre",
-          "Cope Stores, Milford",
-          "McNutt's Tweed, Creeslough",
-          "Muck & Muffins, Dunfanaghy",
-          "Crolly Dolls Factory",
-          "Kennedy's of Ardara",
-          "Eddie Doherty Tweed",
-          "Magee's 1866, Donegal",
-          "Simple Simon's, Donegal",
-          "Donegal Parian China",
-          "Waterworld, Bundoran",
-        ];
-
-        ctx.font = '11px monospace';
-        famousPubs.forEach((p, i) => {
-          ctx.fillStyle = '#ffcc66';
-          ctx.fillText(p, W*0.3, H*0.52 + i*16);
-        });
-        famousShops.forEach((s, i) => {
-          ctx.fillStyle = '#88ccee';
-          ctx.fillText(s, W*0.7, H*0.52 + i*16);
-        });
+        ctx.font = '12px monospace';
+        ctx.fillText('Press TAB to cycle radio stations GTA-style.', W/2, H*0.83);
 
         ctx.fillStyle = gs.frameCount % 50 < 25 ? '#ffcc00' : '#ff8800';
         ctx.font = 'bold 22px monospace';
@@ -1778,7 +2267,7 @@ function Game() {
         // Engine
         ctx.fillStyle = '#1a4a2a';
         ctx.fillRect(trainX + trainW*0.7, trainY + trainH*0.2, trainW*0.3, trainH*0.7);
-        // Yellow stripe (Iarnród Éireann)
+        // Yellow stripe (IarnrÃƒÂ³d Ãƒâ€°ireann)
         ctx.fillStyle = '#ffaa00';
         ctx.fillRect(trainX, trainY + trainH*0.55, trainW, trainH*0.08);
         // Windows
@@ -1793,11 +2282,11 @@ function Game() {
           ctx.arc(trainX + 30 + twh * (trainW/6), trainY + trainH, 8, 0, Math.PI*2);
           ctx.fill();
         }
-        // "IARNRÓD ÉIREANN" on side
+        // "IARNRÃƒâ€œD Ãƒâ€°IREANN" on side
         ctx.fillStyle = '#ffcc00';
         ctx.font = `bold ${Math.max(10, trainW*0.03)|0}px monospace`;
         ctx.textAlign = 'center';
-        ctx.fillText('IARNRÓD ÉIREANN / IRISH RAIL', trainX + trainW*0.35, trainY + trainH*0.52);
+        ctx.fillText('IARNRÃƒâ€œD Ãƒâ€°IREANN / IRISH RAIL', trainX + trainW*0.35, trainY + trainH*0.52);
         // Big red X over the train
         ctx.strokeStyle = '#ff2222';
         ctx.lineWidth = 6;
@@ -1807,6 +2296,12 @@ function Game() {
         ctx.beginPath();
         ctx.moveTo(trainX + trainW + 10, trainY); ctx.lineTo(trainX - 10, trainY + trainH + 10);
         ctx.stroke();
+
+        const portraitW = Math.min(170, W * 0.18);
+        const portraitH = portraitW * 1.24;
+        const portraitX = Math.max(24, W - portraitW - 34);
+        const portraitY = H * 0.4;
+        drawMichaelMartinPortrait(ctx, portraitX, portraitY, portraitW, portraitH);
 
         // The joke
         ctx.fillStyle = '#ff4444';
@@ -1892,6 +2387,26 @@ function Game() {
         ctx.fillText(`BUCKFAST: ${gs.drunkLevel}/5`, W - 65, H - 15);
       }
 
+      // Hard lock for touch devices until a hardware keyboard is detected.
+      if (gs.inputBlocked) {
+        ctx.fillStyle = 'rgba(0,0,0,0.88)';
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.fillStyle = '#ffcc66';
+        ctx.font = `bold ${Math.max(22, W*0.035)|0}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText('KEYBOARD REQUIRED', W/2, H*0.38);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `${Math.max(13, W*0.015)|0}px monospace`;
+        ctx.fillText('This game is locked on touch-only devices.', W/2, H*0.45);
+        ctx.fillText('Use a computer, or connect a hardware keyboard.', W/2, H*0.50);
+
+        ctx.fillStyle = '#88ccff';
+        ctx.font = `${Math.max(12, W*0.014)|0}px monospace`;
+        ctx.fillText('Once a keyboard is connected, press any key to continue.', W/2, H*0.57);
+      }
+
       ctx.restore();
       animId = requestAnimationFrame(loop);
     };
@@ -1900,11 +2415,116 @@ function Game() {
     return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize); };
   }, []);
 
+  const stationLibrary = RADIO_DIAL_ORDER.map((stationId) => getStationById(stationId)).filter(Boolean);
+  const radioWheelStations = [...RADIO_STATIONS.map((station) => station.id), RADIO_OFF_STATION.id]
+    .map((stationId) => getStationById(stationId))
+    .filter(Boolean);
+  const currentStation = stationLibrary.find((station) => station.id === activeStation) || RADIO_OFF_STATION;
+  const radioHint = activeStation === RADIO_OFF_STATION.id
+    ? 'TAB: Radio Off'
+    : `TAB: ${currentStation.label}${radioPlaying ? ' On Air' : ''}`;
+  const radioHintDetail = activeStation === RADIO_OFF_STATION.id
+    ? 'Cycle stations'
+    : radioError || radioTrack || currentStation.blurb;
+
   return (
-    <div style={{ width:'100vw', height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#000', overflow:'hidden' }}>
+    <div style={{ width:'100vw', height:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#000', overflow:'hidden', position:'relative' }}>
       <canvas ref={canvasRef} style={{ display:'block', imageRendering:'pixelated', cursor:'none', maxWidth:'100vw', maxHeight:'100vh' }} tabIndex={0} />
+      <div style={{
+        position:'absolute',
+        left:16,
+        bottom:16,
+        pointerEvents:'none',
+        borderRadius:999,
+        border:'1px solid rgba(255,255,255,0.12)',
+        background:'rgba(10,14,18,0.72)',
+        boxShadow:'0 12px 28px rgba(0,0,0,0.35)',
+        padding:'10px 14px',
+        color:'#f1ead9',
+        backdropFilter:'blur(10px)',
+      }}>
+        <div style={{ fontSize:11, letterSpacing:'0.18em', textTransform:'uppercase', color:'#96a8b2' }}>{radioHint}</div>
+        <div style={{ fontSize:12, color:'#fff7e3', marginTop:3, maxWidth:260, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{radioHintDetail}</div>
+      </div>
+
+      {radioPopup && (
+        <div style={{
+          position:'absolute',
+          inset:0,
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+          pointerEvents:'none',
+        }}>
+          <div style={{ position:'relative', width:'min(72vw, 520px)', aspectRatio:'1 / 1' }}>
+            <div style={{
+              position:'absolute',
+              left:'50%',
+              top:'50%',
+              width:'42%',
+              height:'42%',
+              transform:'translate(-50%, -50%)',
+              borderRadius:'50%',
+              background:'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(20,24,28,0.95) 55%, rgba(6,8,10,0.97) 100%)',
+              border:`2px solid ${radioPopup.accent}`,
+              boxShadow:`0 0 40px ${radioPopup.glow}, 0 20px 50px rgba(0,0,0,0.45)`,
+              display:'flex',
+              alignItems:'center',
+              justifyContent:'center',
+              textAlign:'center',
+              padding:'18px 20px',
+              color:'#f5efe2',
+            }}>
+              <div>
+                <div style={{ fontSize:12, letterSpacing:'0.24em', textTransform:'uppercase', color:radioPopup.accent, marginBottom:8 }}>Wild Atlantic Radio</div>
+                <div style={{ fontSize:26, fontWeight:900, lineHeight:1.05 }}>{radioPopup.headline}</div>
+                <div style={{ fontSize:13, color:'#d4dde2', marginTop:10, lineHeight:1.3 }}>{radioPopup.subline || 'Tab to switch station'}</div>
+              </div>
+            </div>
+
+            {radioWheelStations.map((station, index) => {
+              const wheelAngles = [220, 320, 90];
+              const angle = ((wheelAngles[index] ?? (-90 + (360 / radioWheelStations.length) * index)) * Math.PI) / 180;
+              const orbit = 34;
+              const isActive = station.id === radioPopup.stationId;
+              return (
+                <div
+                  key={station.id}
+                  style={{
+                    position:'absolute',
+                    left:`calc(50% + ${Math.cos(angle) * orbit}%)`,
+                    top:`calc(50% + ${Math.sin(angle) * orbit}%)`,
+                    width:isActive ? '22%' : '18%',
+                    height:isActive ? '22%' : '18%',
+                    transform:'translate(-50%, -50%)',
+                    borderRadius:'50%',
+                    background:isActive
+                      ? `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18) 0%, ${station.glow} 24%, rgba(8,10,14,0.94) 100%)`
+                      : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, rgba(12,14,18,0.92) 100%)',
+                    border:`2px solid ${isActive ? station.accent : 'rgba(255,255,255,0.16)'}`,
+                    boxShadow:isActive ? `0 0 32px ${station.glow}` : '0 12px 24px rgba(0,0,0,0.25)',
+                    display:'flex',
+                    flexDirection:'column',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    color:'#f7f1e5',
+                    textAlign:'center',
+                    padding:'8px',
+                    opacity:isActive ? 1 : 0.74,
+                  }}
+                >
+                  <div style={{ fontSize:isActive ? 18 : 14, fontWeight:900, letterSpacing:'0.12em', color:isActive ? station.accent : '#dde6eb' }}>{station.badge}</div>
+                  <div style={{ fontSize:isActive ? 11 : 10, marginTop:4, textTransform:'uppercase', letterSpacing:'0.08em' }}>{station.label}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Game;
+
+

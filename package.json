@@ -8,6 +8,8 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
+    "prestart": "node scripts/syncMusicManifest.js",
+    "prebuild": "node scripts/syncMusicManifest.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
